@@ -44,12 +44,12 @@ import java.util.*;
 
 public class CrateManager extends AbstractManager<CratesPlugin> {
 
-    private final Map<String, Rarity>      rarityMap;
-    private final Map<String, Crate>       crateMap;
+    private final Map<String, Rarity> rarityMap;
+    private final Map<String, Crate> crateMap;
     private final Map<String, PreviewMenu> previewMap;
     private final Map<UUID, Long> previewCooldown;
 
-    private MilestonesMenu   milestonesMenu;
+    private MilestonesMenu milestonesMenu;
 
     public CrateManager(@NotNull CratesPlugin plugin) {
         super(plugin);
@@ -146,6 +146,8 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
             this.loadCrate(crate);
         }
         this.plugin.info("Loaded " + this.crateMap.size() + " crates.");
+
+        this.plugin.runTaskAsync(() -> this.getCrates().forEach(Crate::loadRewardWinDatas));
     }
 
     private void loadCrate(@NotNull Crate crate) {
@@ -490,8 +492,8 @@ public class CrateManager extends AbstractManager<CratesPlugin> {
                 double amount = entry.getValue();
                 if (currency.getHandler().getBalance(player) < amount) {
                     Lang.CRATE_OPEN_ERROR_CANT_AFFORD.getMessage()
-                        .replace(Placeholders.GENERIC_AMOUNT, currency.format(amount))
-                        .replace(crate.replacePlaceholders()).send(player);
+                            .replace(Placeholders.GENERIC_AMOUNT, currency.format(amount))
+                            .replace(crate.replacePlaceholders()).send(player);
                     return false;
                 }
             }

@@ -34,9 +34,9 @@ import java.util.stream.Stream;
 
 public class Reward implements Weighted, Placeholder {
 
-    private final CratesPlugin   plugin;
-    private final Crate          crate;
-    private final String         id;
+    private final CratesPlugin plugin;
+    private final Crate crate;
+    private final String id;
     private final PlaceholderMap placeholderMap;
     private final PlaceholderMap placeholderFullMap;
 
@@ -49,8 +49,8 @@ public class Reward implements Weighted, Placeholder {
     private LimitValues     globalLimits;
     private ItemStack       preview;
     private List<ItemStack> items;
-    private List<String>    commands;
-    private Set<String>     ignoredForPermissions;
+    private List<String> commands;
+    private Set<String> ignoredForPermissions;
 
     private LimitData globalLimitData;
 
@@ -111,6 +111,23 @@ public class Reward implements Weighted, Placeholder {
     }
 
     @NotNull
+    public static Reward createEmpty(@NotNull CratesPlugin plugin, @NotNull Crate crate, @NotNull String id) {
+        String name = StringUtil.capitalizeUnderscored(id);
+        double weight = 25D;
+        Rarity rarity = plugin.getCrateManager().getDefaultRarity();
+        boolean broadcast = false;
+        boolean setPlaceholders = false;
+        RewardWinLimit playerWinLimit = new RewardWinLimit(false, -1, 0, 1);
+        RewardWinLimit globalWinLimit = new RewardWinLimit(false, -1, 0, 1);
+        ItemStack preview = ItemUtil.getSkinHead(Placeholders.SKIN_NEW_REWARD);
+        List<ItemStack> items = new ArrayList<>();
+        List<String> commands = new ArrayList<>();
+        Set<String> ignoredPermissions = new HashSet<>();
+
+        return new Reward(plugin, crate, id, name, weight, rarity, broadcast, setPlaceholders, playerWinLimit, globalWinLimit, preview, items, commands, ignoredPermissions);
+    }
+
+    @NotNull
     public static Reward read(@NotNull CratesPlugin plugin, @NotNull Crate crate, @NotNull FileConfig config, @NotNull String path, @NotNull String id) {
         String name = config.getString(path + ".Name", id);
         double weight = config.getDouble(path + ".Weight", config.getDouble(path + ".Chance"));
@@ -138,11 +155,11 @@ public class Reward implements Weighted, Placeholder {
 
         List<String> commands = new ArrayList<>();
         for (String command : config.getStringList(path + ".Commands")) {
-             commands.add(command
-                 // Legacy placeholder validation
-                .replace("[CONSOLE]", "")
-                .replace("%player%", Placeholders.PLAYER_NAME)
-                .trim()
+            commands.add(command
+                    // Legacy placeholder validation
+                    .replace("[CONSOLE]", "")
+                    .replace("%player%", Placeholders.PLAYER_NAME)
+                    .trim()
             );
         }
 
@@ -195,8 +212,7 @@ public class Reward implements Weighted, Placeholder {
 
                 globalLeft = Math.max(0, globalLimits.getAmount() - this.globalLimitData.getAmount());
             }
-        }
-        else globalLeft = -1;
+        } else globalLeft = -1;
 
         if (playerLimits.isEnabled() && !playerLimits.isUnlimitedAmount()) {
             CrateUser user = this.plugin.getUserManager().getUserData(player);
@@ -207,8 +223,7 @@ public class Reward implements Weighted, Placeholder {
 
                 playerLeft = Math.max(0, playerLimits.getAmount() - winData.getAmount());
             }
-        }
-        else playerLeft = -1;
+        } else playerLeft = -1;
 
         if (globalLeft < 0 || playerLeft < 0) {
             return Math.max(playerLeft, globalLeft);
@@ -283,8 +298,7 @@ public class Reward implements Weighted, Placeholder {
             }
 
             replacer = combo;
-        }
-        else replacer = null;
+        } else replacer = null;
 
         this.getItems().forEach(item -> {
             ItemStack give = new ItemStack(item);
@@ -315,16 +329,16 @@ public class Reward implements Weighted, Placeholder {
         this.giveContent(player);
 
         Lang.CRATE_OPEN_REWARD_INFO.getMessage()
-            .replace(this.getCrate().replacePlaceholders())
-            .replace(this.replacePlaceholders())
-            .send(player);
+                .replace(this.getCrate().replacePlaceholders())
+                .replace(this.replacePlaceholders())
+                .send(player);
 
         if (this.isBroadcast()) {
             Lang.CRATE_OPEN_REWARD_BROADCAST.getMessage()
-                .replace(Placeholders.forPlayer(player))
-                .replace(this.getCrate().replacePlaceholders())
-                .replace(this.replacePlaceholders())
-                .broadcast();
+                    .replace(Placeholders.forPlayer(player))
+                    .replace(this.getCrate().replacePlaceholders())
+                    .replace(this.replacePlaceholders())
+                    .broadcast();
         }
 
         if (globalLimits.isEnabled() && this.globalLimitData != null) {
@@ -381,13 +395,13 @@ public class Reward implements Weighted, Placeholder {
         return this.name;
     }
 
+    public void setName(@NotNull String name) {
+        this.name = (name);
+    }
+
     @NotNull
     public String getNameTranslated() {
         return NightMessage.asLegacy(this.getName());
-    }
-
-    public void setName(@NotNull String name) {
-        this.name = (name);
     }
 
     @Override
@@ -417,12 +431,12 @@ public class Reward implements Weighted, Placeholder {
         this.broadcast = broadcast;
     }
 
-    public void setPlaceholderApply(boolean placeholderApply) {
-        this.placeholderApply = placeholderApply;
-    }
-
     public boolean isPlaceholderApply() {
         return placeholderApply;
+    }
+
+    public void setPlaceholderApply(boolean placeholderApply) {
+        this.placeholderApply = placeholderApply;
     }
 
     public boolean isOneTimed() {

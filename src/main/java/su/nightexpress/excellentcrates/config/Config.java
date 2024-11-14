@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import su.nightexpress.excellentcrates.util.ClickType;
 import su.nightexpress.excellentcrates.util.InteractType;
+import su.nightexpress.excellentcrates.hologram.HologramType;
+import su.nightexpress.excellentcrates.hooks.HookId;
+import su.nightexpress.excellentcrates.util.ClickType;
+import su.nightexpress.excellentcrates.util.InteractType;
 import su.nightexpress.nightcore.config.ConfigValue;
 import su.nightexpress.nightcore.util.Plugins;
 import su.nightexpress.nightcore.util.StringUtil;
@@ -20,14 +24,14 @@ import static su.nightexpress.nightcore.util.text.tag.Tags.*;
 
 public class Config {
 
-    public static final String DIR_CRATES   = "/crates/";
+    public static final String DIR_CRATES = "/crates/";
     public static final String DIR_PREVIEWS = "/previews/";
-    public static final String DIR_KEYS     = "/keys/";
-    public static final String DIR_MENUS    = "/menu/";
+    public static final String DIR_KEYS = "/keys/";
+    public static final String DIR_MENUS = "/menu/";
     public static final String DIR_OPENINGS = "/openingsv2/";
 
     public static final String FILE_MILESTONES = "milestones.yml";
-    public static final String FILE_LOGS       = "openings.log";
+    public static final String FILE_LOGS = "openings.log";
 
     public static final ConfigValue<Boolean> DATABASE_SYNC_REWARDS_DATA = ConfigValue.create("Database.Sync_Reward_Data",
         true,
@@ -42,8 +46,8 @@ public class Config {
     );
 
     public static final ConfigValue<Boolean> MILESTONES_ENABLED = ConfigValue.create("Milestones.Enabled",
-        true,
-        "Sets whether or not Milestones feature is enabled (globally)."
+            true,
+            "Sets whether or not Milestones feature is enabled (globally)."
     );
 
     public static final ConfigValue<Integer> CRATE_EFFECTS_VISIBILITY_DISTANCE = ConfigValue.create("Crate.Effects.Visibility_Distance",
@@ -58,19 +62,19 @@ public class Config {
     );
 
     public static final ConfigValue<Map<String, List<String>>> CRATE_HOLOGRAM_TEMPLATES = ConfigValue.forMap("Crate.Holograms.Templates",
-        (cfg, path, key) -> cfg.getStringList(path + "." + key),
-        (cfg, path, map) -> map.forEach((id, text) -> cfg.set(path + "." + id, text)),
-        () -> {
-            return Map.of(
-                DEFAULT, Arrays.asList(
-                    LIGHT_YELLOW.enclose(BOLD.enclose(CRATE_NAME)),
-                    LIGHT_GRAY.enclose("Get keys at " + LIGHT_YELLOW.enclose("put_your_site.com")),
-                    LIGHT_GRAY.enclose("You have " + LIGHT_YELLOW.enclose("%excellentcrates_keys_" + CRATE_ID + "%") + " keys"))
-            );
-        },
-        "Here you can create your own hologram text templates to use it in your crates.",
-        "You can use 'Crate' placeholders: " + WIKI_PLACEHOLDERS,
-        Plugins.PLACEHOLDER_API + " is also supported here (if hologram handler supports it)."
+            (cfg, path, key) -> cfg.getStringList(path + "." + key),
+            (cfg, path, map) -> map.forEach((id, text) -> cfg.set(path + "." + id, text)),
+            () -> {
+                return Map.of(
+                        DEFAULT, Arrays.asList(
+                                LIGHT_YELLOW.enclose(BOLD.enclose(CRATE_NAME)),
+                                LIGHT_GRAY.enclose("Get keys at " + LIGHT_YELLOW.enclose("put_your_site.com")),
+                                LIGHT_GRAY.enclose("You have " + LIGHT_YELLOW.enclose("%excellentcrates_keys_" + CRATE_ID + "%") + " keys"))
+                );
+            },
+            "Here you can create your own hologram text templates to use it in your crates.",
+            "You can use 'Crate' placeholders: " + WIKI_PLACEHOLDERS,
+            Plugins.PLACEHOLDER_API + " is also supported here (if hologram handler supports it)."
     );
 
     public static final ConfigValue<Double> CRATE_HOLOGRAM_LINE_GAP = ConfigValue.create("Crate.Holograms.LineGap",
@@ -119,65 +123,61 @@ public class Config {
     );
 
     public static final ConfigValue<Long> CRATE_PREVIEW_COOLDOWN = ConfigValue.create("Crate.Preview_Cooldown",
-        2500L,
-        "Sets cooldown (in milliseconds) for crate preview by clicking crate block(s).",
-        "The main purpose of this setting is to prevent exploit using hacked clients by sending a lot of crate interaction packets causing server overload by GUI generation.",
-        "Resets on player quit.",
-        "[Default is 2500]"
+            2500L,
+            "Sets cooldown (in milliseconds) for crate preview by clicking crate block(s).",
+            "The main purpose of this setting is to prevent exploit using hacked clients by sending a lot of crate interaction packets causing server overload by GUI generation.",
+            "Resets on player quit.",
+            "[Default is 2500]"
     );
 
     public static final ConfigValue<Integer> CRATE_OPENING_CLOSE_TIME = ConfigValue.create("Crate.Opening_Close_Time",
-        20,
-        "Sets how soon (in ticks) crate opening animation GUI will be closed when completed.",
-        "1 second = 20 ticks. 20 ticks by default.");
+            20,
+            "Sets how soon (in ticks) crate opening animation GUI will be closed when completed.",
+            "1 second = 20 ticks. 20 ticks by default.");
 
     public static final ConfigValue<Boolean> CRATE_OPENING_ALLOW_SKIP = ConfigValue.create("Crate.Opening_Allow_Skip",
-        false,
-        "Sets whether or not players can skip crate opening animations.",
-        "When enabled, make sure the check out the 'Max_Ticks_To_Skip' setting in the " + DIR_OPENINGS + " configs."
+            false,
+            "Sets whether or not players can skip crate opening animations.",
+            "When enabled, make sure the check out the 'Max_Ticks_To_Skip' setting in the " + DIR_OPENINGS + " configs."
     );
 
     public static final ConfigValue<Double> CRATE_PUSHBACK_Y = ConfigValue.create("Crate.Block_Pushback.Y",
-        -0.4D,
-        "Sets the Y offset for crate block pushback.");
+            -0.4D,
+            "Sets the Y offset for crate block pushback.");
 
     public static final ConfigValue<Double> CRATE_PUSHBACK_MULTIPLY = ConfigValue.create("Crate.Block_Pushback.Multiply",
-        -1.25D,
-        "Vector multiplier for crate block pushback. The higher value - the harder pushback.");
-
-    private static final ConfigValue<Map<ClickType, InteractType>> CRATE_CLICK_ACTIONS = ConfigValue.create("Crate.Click_Actions",
-        (cfg, path, def) -> {
-            Map<ClickType, InteractType> map = new HashMap<>();
-            for (ClickType clickType : ClickType.values()) {
-                InteractType clickAction = cfg.getEnum(path + "." + clickType.name(), InteractType.class);
-                if (clickAction == null) continue;
-
-                map.put(clickType, clickAction);
-            }
-            return map;
-        },
-        (cfg, path, map) -> map.forEach((click, action) -> cfg.set(path + "." + click.name(), action)),
-        () -> Map.of(
-            ClickType.LEFT, InteractType.CRATE_PREVIEW,
-            ClickType.RIGHT, InteractType.CRATE_OPEN,
-            ClickType.SHIFT_RIGHT, InteractType.CRATE_MASS_OPEN
-        ),
-        "Defines the crate behavior on certain clicks.",
-        "Allowed click types: " + StringUtil.inlineEnum(ClickType.class, ", "),
-        "Allowed crate actions: " + StringUtil.inlineEnum(InteractType.class, ", "));
-
+            -1.25D,
+            "Vector multiplier for crate block pushback. The higher value - the harder pushback.");
     public static final ConfigValue<DateTimeFormatter> LOGS_DATE_FORMAT = ConfigValue.create("Logs.DateFormat",
-        (cfg, path, def) -> DateTimeFormatter.ofPattern(cfg.getString(path, "dd/MM/yyyy HH:mm:ss")),
-        (cfg, path, formatter) -> cfg.set(path, "dd/MM/yyyy HH:mm:ss"),
-        () -> DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-
+            (cfg, path, def) -> DateTimeFormatter.ofPattern(cfg.getString(path, "dd/MM/yyyy HH:mm:ss")),
+            (cfg, path, formatter) -> cfg.set(path, "dd/MM/yyyy HH:mm:ss"),
+            () -> DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     public static final ConfigValue<Boolean> LOGS_TO_CONSOLE = ConfigValue.create("Logs.Enabled.Console",
-        false,
-        "Sets whether or not all crate openings & reward wins will be logged to console.");
-
+            false,
+            "Sets whether or not all crate openings & reward wins will be logged to console.");
     public static final ConfigValue<Boolean> LOGS_TO_FILE = ConfigValue.create("Logs.Enabled.File",
-        true,
-        "Sets whether or not all crate openings & reward wins will be logged to a file.");
+            true,
+            "Sets whether or not all crate openings & reward wins will be logged to a file.");
+    private static final ConfigValue<Map<ClickType, InteractType>> CRATE_CLICK_ACTIONS = ConfigValue.create("Crate.Click_Actions",
+            (cfg, path, def) -> {
+                Map<ClickType, InteractType> map = new HashMap<>();
+                for (ClickType clickType : ClickType.values()) {
+                    InteractType clickAction = cfg.getEnum(path + "." + clickType.name(), InteractType.class);
+                    if (clickAction == null) continue;
+
+                    map.put(clickType, clickAction);
+                }
+                return map;
+            },
+            (cfg, path, map) -> map.forEach((click, action) -> cfg.set(path + "." + click.name(), action)),
+            () -> Map.of(
+                    ClickType.LEFT, InteractType.CRATE_PREVIEW,
+                    ClickType.RIGHT, InteractType.CRATE_OPEN,
+                    ClickType.SHIFT_RIGHT, InteractType.CRATE_MASS_OPEN
+            ),
+            "Defines the crate behavior on certain clicks.",
+            "Allowed click types: " + StringUtil.inlineEnum(ClickType.class, ", "),
+            "Allowed crate actions: " + StringUtil.inlineEnum(InteractType.class, ", "));
 
     @Nullable
     public static InteractType getCrateClickAction(@NotNull ClickType clickType) {

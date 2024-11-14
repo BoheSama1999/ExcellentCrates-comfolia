@@ -12,3 +12,4 @@ softdepend:
   - ProtocolLib
   - packetevents
 api-version: 1.19
+folia-supported: true

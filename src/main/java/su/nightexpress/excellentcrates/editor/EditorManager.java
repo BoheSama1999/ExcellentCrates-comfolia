@@ -17,9 +17,9 @@ public class EditorManager extends AbstractManager<CratesPlugin> {
 
     private CratesEditorMenu editorMenu;
 
-    private CrateListEditor       cratesEditor;
-    private CrateMainEditor       crateSettingsEditor;
-    private CrateParticleEditor   crateParticleEditor;
+    private CrateListEditor cratesEditor;
+    private CrateMainEditor crateSettingsEditor;
+    private CrateParticleEditor crateParticleEditor;
     private CrateMilestonesEditor milestonesEditor;
     private CratePlacementEditor  placementEditor;
     private RewardListEditor      rewardsEditor;
@@ -75,7 +75,6 @@ public class EditorManager extends AbstractManager<CratesPlugin> {
     public void openEditor(@NotNull Player player) {
         this.editorMenu.open(player, this.plugin);
     }
-
 
 
     public void openCrateList(@NotNull Player player) {

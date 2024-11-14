@@ -33,21 +33,21 @@ public class CratesPlugin extends NightDataPlugin<CrateUser> {
 
     private EditorManager   editorManager;
     private CurrencyManager currencyManager;
-    private OpeningManager  openingManager;
-    private KeyManager      keyManager;
-    private CrateManager    crateManager;
-    private MenuManager     menuManager;
+    private OpeningManager openingManager;
+    private KeyManager keyManager;
+    private CrateManager crateManager;
+    private MenuManager menuManager;
 
     private HologramHandler hologramHandler;
-    private CrateLogger     crateLogger;
+    private CrateLogger crateLogger;
 
     @Override
     @NotNull
     protected PluginDetails getDefaultDetails() {
-        return PluginDetails.create("Crates", new String[]{"crates", "ecrates", "excellentcrates", "crate", "case", "cases"})
-            .setConfigClass(Config.class)
-            .setLangClass(Lang.class)
-            .setPermissionsClass(Perms.class);
+        return PluginDetails.create("Crates", new String[]{"excellentcrates", "ecrates", "crates", "crate", "case", "cases"})
+                .setConfigClass(Config.class)
+                .setLangClass(Lang.class)
+                .setPermissionsClass(Perms.class);
     }
 
     @Override

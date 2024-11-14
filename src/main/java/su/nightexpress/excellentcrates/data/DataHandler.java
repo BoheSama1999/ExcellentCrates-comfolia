@@ -42,8 +42,8 @@ public class DataHandler extends AbstractUserDataHandler<CratesPlugin, CrateUser
 
     public static final SQLColumn COLUMN_CRATE_DATA = SQLColumn.of("crateData", ColumnType.STRING);
 
-    private static final SQLColumn COLUMN_CRATE_ID    = SQLColumn.of("crateId", ColumnType.STRING);
-    private static final SQLColumn COLUMN_REWARD_ID   = SQLColumn.of("rewardId", ColumnType.STRING);
+    private static final SQLColumn COLUMN_CRATE_ID = SQLColumn.of("crateId", ColumnType.STRING);
+    private static final SQLColumn COLUMN_REWARD_ID = SQLColumn.of("rewardId", ColumnType.STRING);
     private static final SQLColumn COLUMN_REWARD_DATA = SQLColumn.of("rewardData", ColumnType.STRING);
 
     private final String                         rewardDataTable;
@@ -76,7 +76,6 @@ public class DataHandler extends AbstractUserDataHandler<CratesPlugin, CrateUser
             }
         };
     }
-
     public void update() {
         if (!SQLQueries.hasColumn(this.getConnector(), this.tableUsers, COLUMN_CRATE_COOLDOWNS)) return;
 
@@ -187,9 +186,9 @@ public class DataHandler extends AbstractUserDataHandler<CratesPlugin, CrateUser
         );
 
         this.createTable(this.rewardDataTable, Lists.newList(
-            COLUMN_CRATE_ID,
-            COLUMN_REWARD_ID,
-            COLUMN_REWARD_DATA
+                COLUMN_CRATE_ID,
+                COLUMN_REWARD_ID,
+                COLUMN_REWARD_DATA
         ));
     }
 
@@ -244,9 +243,9 @@ public class DataHandler extends AbstractUserDataHandler<CratesPlugin, CrateUser
 
     public void insertRewardLimitData(@NotNull Reward reward, @NotNull LimitData winData) {
         this.insert(this.rewardDataTable, Lists.newList(
-            COLUMN_CRATE_ID.toValue(reward.getCrate().getId()),
-            COLUMN_REWARD_ID.toValue(reward.getId()),
-            COLUMN_REWARD_DATA.toValue(this.gson.toJson(winData))
+                COLUMN_CRATE_ID.toValue(reward.getCrate().getId()),
+                COLUMN_REWARD_ID.toValue(reward.getId()),
+                COLUMN_REWARD_DATA.toValue(this.gson.toJson(winData))
         ));
     }
 

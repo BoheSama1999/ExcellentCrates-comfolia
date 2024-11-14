@@ -27,10 +27,9 @@ import static su.nightexpress.nightcore.util.text.tag.Tags.BLACK;
 
 public class InventoryOpeningMenu extends ConfigMenu<CratesPlugin> implements OpeningProvider {
 
-    private InventoryOpeningConfig openingConfig;
-
     private final ItemHandler startHandler;
     private final ItemHandler selectHandler;
+    private InventoryOpeningConfig openingConfig;
 
     public InventoryOpeningMenu(@NotNull CratesPlugin plugin, @NotNull FileConfig config) {
         super(plugin, config);
@@ -58,8 +57,7 @@ public class InventoryOpeningMenu extends ConfigMenu<CratesPlugin> implements Op
             int slot = event.getRawSlot();
             if (opening.isSelectedRewardSlot(slot)) {
                 opening.unselectRewardSlot(slot);
-            }
-            else {
+            } else {
                 if (!opening.isAllSlotsSelected()) {
                     opening.selectRewardSlot(slot);
                 }
@@ -138,13 +136,11 @@ public class InventoryOpeningMenu extends ConfigMenu<CratesPlugin> implements Op
         if (!opening.isCompleted()) {
             if (opening.canSkip()) {
                 opening.instaRoll();
-            }
-            else /*if (opening.hasRewardAttempts())*/ {
+            } else /*if (opening.hasRewardAttempts())*/ {
                 opening.setPopupNextTick(true);
             }
             //this.runNextTick(() -> viewer.getPlayer().openInventory(opening.getInventory()));
-        }
-        else {
+        } else {
             opening.setCloseDelay(0);
             opening.stop();
             //super.onClose(viewer, event);

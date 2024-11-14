@@ -18,9 +18,9 @@ public class LimitValues implements Placeholder {
     private final PlaceholderMap placeholders;
 
     private boolean enabled;
-    private int     amount;
-    private long    cooldown;
-    private int     cooldownStep;
+    private int amount;
+    private long cooldown;
+    private int cooldownStep;
 
     public LimitValues(boolean enabled, int amount, long cooldown, int cooldownStep) {
         this.setEnabled(enabled);

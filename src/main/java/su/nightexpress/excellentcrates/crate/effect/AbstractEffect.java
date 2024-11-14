@@ -9,15 +9,32 @@ import su.nightexpress.nightcore.util.wrapper.UniParticle;
 public abstract class AbstractEffect {
 
     protected final long interval;
-    protected final int  duration;
-    protected int  step;
-    protected int  count;
+    protected final int duration;
+    protected int step;
+    protected int count;
 
     public AbstractEffect(long interval, int duration) {
         this.step = 0;
         this.count = 0;
         this.interval = interval;
         this.duration = duration;
+    }
+
+    @NotNull
+    public static Location getPointOnCircle(@NotNull Location location, boolean doCopy, double x, double z, double y) {
+        return (doCopy ? location.clone() : location).add(Math.cos(x) * z, y, Math.sin(x) * z);
+    }
+
+    protected static void playSafe(@NotNull Location location, @NotNull Consumer<Player> consumer) {
+        World world = location.getWorld();
+        if (world == null) return;
+
+        Set<Player> players = new HashSet<>(world.getPlayers());
+        players.forEach(player -> {
+            if (player == null || !player.isOnline()) return;
+
+            consumer.accept(player);
+        });
     }
 
     public void reset() {
